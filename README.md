@@ -1,5 +1,7 @@
 # Apple SMI
 
+**Apple Silicon System Management Interface**
+
 Lightweight macOS GPU inspector inspired by `nvidia-smi`. It shells out to `system_profiler` and `powermetrics`, normalizes vendor/bus/Metal labels, and prints a concise per-GPU line.
 
 ## Requirements
