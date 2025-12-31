@@ -33,6 +33,8 @@ pub fn render() -> Result<()> {
     for (i, g) in root.gpus.iter().enumerate() {
         ui::print_card(i, g);
     }
-
+    ui::print_empty_line();
+    ui::print_div_str(0);
+    
     Ok(())
 }

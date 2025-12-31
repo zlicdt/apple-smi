@@ -159,3 +159,7 @@ pub fn print_card(i: usize, g: &crate::syspf::GpuEntry) {
     }
     print_div_str(0);
 }
+
+pub fn print_empty_line() {
+    println!();
+}
