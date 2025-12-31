@@ -20,8 +20,8 @@ pub struct GpuEntry {
     // I think _name and sppci_model are equivalent, but keep both for safety
     #[serde(rename = "_name", default)]
     pub name: String,
-    #[serde(default)]
-    pub sppci_model: String,
+    // #[serde(default)]
+    // pub sppci_model: String,
     #[serde(default)]
     pub spdisplays_vendor: String,
     #[serde(default)]
@@ -103,20 +103,4 @@ pub fn run_syspf() -> Result<(String, String)> {
     let s_gpu = String::from_utf8(gpu_out.stdout)?;
     let s_os = String::from_utf8(os_out.stdout)?;
     Ok((s_gpu, s_os))
-}
-
-pub fn os_version() -> Result<String> {
-    let out = Command::new("system_profiler")
-        .args(["-json", "SPSoftwareDataType"])
-        .output()
-        .context("is this macOS?")?;
-
-    anyhow::ensure!(
-        out.status.success(),
-        "system_profiler exited with status {}",
-        out.status
-    );
-
-    let s = String::from_utf8(out.stdout)?;
-    Ok(s)
 }
