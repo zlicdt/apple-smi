@@ -8,6 +8,7 @@
 use anyhow::Result;
 mod syspf;
 mod render;
+mod utils;
 
 fn main() -> Result<()> {
     // TODO: Check root permissions, that we can get powermetrics data

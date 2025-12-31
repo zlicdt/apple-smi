@@ -58,9 +58,56 @@ impl GpuEntry {
     }
 }
 
-pub fn run_syspf() -> Result<String> {
-    let out = Command::new("system_profiler")
+#[derive(Deserialize)]
+pub struct SysProf {
+    #[serde(rename = "SPSoftwareDataType", default)]
+    pub system: Vec<SysVersion>,
+}
+#[derive(Deserialize)]
+pub struct SysVersion {
+    #[serde(default)]
+    pub os_version: String,
+}
+
+impl SysVersion {
+    pub fn os_version_label(&self) -> &str {
+        match self.os_version.strip_prefix("macOS ") {
+            Some(rest) => rest,
+            None => &self.os_version,
+        }
+    }
+}
+
+pub fn run_syspf() -> Result<(String, String)> {
+    let gpu_out = Command::new("system_profiler")
         .args(["-json", "SPDisplaysDataType"])
+        .output()
+        .context("is this macOS?")?;
+
+    let os_out = Command::new("system_profiler")
+        .args(["-json", "SPSoftwareDataType"])
+        .output()
+        .context("is this macOS?")?;
+
+    anyhow::ensure!(
+        gpu_out.status.success(),
+        "system_profiler exited with status {}",
+        gpu_out.status
+    );
+    anyhow::ensure!(
+        os_out.status.success(),
+        "system_profiler exited with status {}",
+        os_out.status
+    );
+
+    let s_gpu = String::from_utf8(gpu_out.stdout)?;
+    let s_os = String::from_utf8(os_out.stdout)?;
+    Ok((s_gpu, s_os))
+}
+
+pub fn os_version() -> Result<String> {
+    let out = Command::new("system_profiler")
+        .args(["-json", "SPSoftwareDataType"])
         .output()
         .context("is this macOS?")?;
 
