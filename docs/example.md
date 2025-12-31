@@ -5,10 +5,12 @@ This is an example for develop.
 
 I deleted things I think should not be display. You can see description below.
 
+**When someline finished, put char 'F' after that**
+
 ```
-+-----------------------------------------------------------------------------------------+
-| Apple-SMI 0.1.0                    macOS Version: 26.2           Metal Version: 4       |
-|-----------------------------------------+------------------------+----------------------|
++-----------------------------------------------------------------------------------------+ F
+| Apple-SMI 0.1.0                    macOS Version: 26.2           Metal Version: 4       | F
+|-----------------------------------------+------------------------+----------------------| F
 | GPU  Name                               | Bus-Id          Disp.A |                      |
 | Fan  Temp                     Pwr:Usage |           Memory-Usage | GPU-Util  Compute M. |
 |                                         |                        |                      |
