@@ -5,7 +5,7 @@
  * ui.rs
  * Construct output text.
 */
-use crate::{utils};
+use crate::utils;
 
 // Whoh a geek print function, I'm genius!
 pub fn print_div_str(dtype: i32) {

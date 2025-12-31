@@ -23,8 +23,6 @@ pub struct GpuEntry {
     // #[serde(default)]
     // pub sppci_model: String,
     #[serde(default)]
-    pub spdisplays_vendor: String,
-    #[serde(default)]
     pub sppci_bus: String,
     #[serde(default)]
     pub sppci_cores: String,
@@ -33,13 +31,6 @@ pub struct GpuEntry {
 }
 
 impl GpuEntry {
-    pub fn vendor_label(&self) -> &str {
-        match self.spdisplays_vendor.strip_prefix("sppci_vendor_") {
-            Some(rest) => rest,
-            None => &self.spdisplays_vendor,
-        }
-    }
-
     pub fn bus_label(&self) -> &str {
         match self.sppci_bus.as_str() {
             "spdisplays_builtin" => "Built-in",
