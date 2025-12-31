@@ -11,12 +11,12 @@ I deleted things I think should not be display. You can see description below.
 +-----------------------------------------------------------------------------------------+ F
 | Apple-SMI 0.1.0                    macOS Version: 26.2           Metal Version: 4       | F
 |-----------------------------------------+------------------------+----------------------| F
-| GPU  Name                               | Bus-Id          Disp.A |                      | F
-| Fan  Temp                     Pwr:Usage |           Memory-Usage | GPU-Util  Compute M. | F
+| GPU  Name                     Frequency | Bus-Id          Disp.A |                      | F
+| Fan  Temp  Perf               Pwr:Usage |           Memory-Usage | GPU-Util  Compute M. | F
 |                                         |                        |                      | F
 |=========================================|========================+======================| F
-|   0  Apple M4                           | Built-in            On |                      | F
-| 1000  34C                          0.4W |     4096MiB / 16384MiB |      0%      Default |
+|   0  Apple M4                   800 MHz | Built-in            On |                      | F
+| 1000  34C  P3                      0.4W |     4096MiB / 16384MiB |      0%      Default |
 |                                         |                        |                      |
 +-----------------------------------------+------------------------+----------------------+
                                                                                             F
@@ -106,7 +106,7 @@ I deleted things I think should not be display. You can see description below.
 ### `Perf`（Performance State / P-state）
 
 * **含义**：性能状态 P0..P12（P0 最高性能）。([NVIDIA Docs][1])
-* **Apple 平台**：不该出现（Apple 没有公开同名 P-state；有 DVFS/调频但不是这个模型）。
+* **Apple 平台**：P-State，能拿到。
 
 ### `Pwr:Usage/Cap`
 
