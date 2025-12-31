@@ -5,9 +5,9 @@
  * syspf.rs
  * Fetch data by running system_profiler output JSON and parse that.
 */
+use anyhow::{Context, Ok, Result};
 use serde::Deserialize;
 use std::process::Command;
-use anyhow::{Context, Ok, Result};
 
 #[derive(Deserialize)]
 pub struct Root {

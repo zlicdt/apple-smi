@@ -6,8 +6,8 @@
  * The 'entry'.
 */
 use anyhow::Result;
-mod syspf;
 mod render;
+mod syspf;
 mod utils;
 
 fn main() -> Result<()> {

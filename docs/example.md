@@ -15,7 +15,7 @@ I deleted things I think should not be display. You can see description below.
 | Fan  Temp  Perf               Pwr:Usage |           Memory-Usage | GPU-Util  Compute M. | F
 |                                         |                        |                      | F
 |=========================================|========================+======================| F
-|   0  Apple M4                   800 MHz | Built-in            On |                      | F
+|   0  Apple M4                   800 MHz | Built-in            On |                      |
 | 1000  34C  P3                      0.4W |     4096MiB / 16384MiB |      0%      Default |
 |                                         |                        |                      |
 +-----------------------------------------+------------------------+----------------------+
