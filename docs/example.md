@@ -11,10 +11,10 @@ I deleted things I think should not be display. You can see description below.
 +-----------------------------------------------------------------------------------------+ F
 | Apple-SMI 0.1.0                    macOS Version: 26.2           Metal Version: 4       | F
 |-----------------------------------------+------------------------+----------------------| F
-| GPU  Name                               | Bus-Id          Disp.A |                      |
-| Fan  Temp                     Pwr:Usage |           Memory-Usage | GPU-Util  Compute M. |
-|                                         |                        |                      |
-|=========================================|========================+======================|
+| GPU  Name                               | Bus-Id          Disp.A |                      | F
+| Fan  Temp                     Pwr:Usage |           Memory-Usage | GPU-Util  Compute M. | F
+|                                         |                        |                      | F
+|=========================================|========================+======================| F
 |  0   Apple M4                           | Built-in            On |                      |
 | 1000   34C                         0.4W |     4096MiB / 16384MiB |   0%         Default |
 |                                         |                        |                      |
