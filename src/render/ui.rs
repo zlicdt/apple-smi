@@ -113,3 +113,49 @@ pub fn print_title() {
         line.push('|');
     }
 }
+
+pub fn print_card(i: usize, g: &crate::syspf::GpuEntry) {
+    let name: &str = g.name.as_str();
+    let bus: &str = g.bus_label();
+    const SEGMENTS: [[usize; 3]; 3] = [[41, 25, 23], [41, 25, 23], [41, 25, 23]];
+    let container: [[String; 3]; 3] = [
+        [
+            format!(" {}  {}", i, name), // leading space per requirement
+            format!("| {}            {}", bus, "On"), // TODO: display status from syspf display list
+            String::from("|"),
+        ],
+        // TODO: Fill real data by powermetrics
+        [
+            String::from(" Fan  Temp                 Pwr:Usage"),
+            String::from("|           Memory-Usage"),
+            String::from("| GPU-Util  Compute M."),
+        ],
+        [
+            String::from(""),
+            String::from("|"),
+            String::from("|"),
+        ],
+    ];
+    fn pad(s: &str, width: usize) -> String {
+        if s.len() >= width {
+            s[..width].to_string()
+        } else {
+            let mut out = String::with_capacity(width);
+            out.push_str(s);
+            out.extend(std::iter::repeat(' ').take(width - s.len()));
+            out
+        }
+    }
+
+    let mut line = String::from("|");
+    for row in 0..3 {
+        for col in 0..3 {
+            line.push_str(&pad(&container[row][col], SEGMENTS[row][col]));
+        }
+        line.push('|');
+        println!("{}", line);
+        line.clear();
+        line.push('|');
+    }
+    print_div_str(0);
+}

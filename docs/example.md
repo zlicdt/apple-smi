@@ -140,3 +140,23 @@ I deleted things I think should not be display. You can see description below.
 
 * **含义**：Multi-Instance GPU 是否启用（Enabled/Disabled/NA）。([NVIDIA Docs][1])
 * **Apple 平台**：不该出现（Apple 没有 MIG 这种分区机制对标）。
+
+## MultiCard
+Looks like this, so **ui render can draw card info from `S` to `E`**:
+```
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 470.161.03   Driver Version: 470.161.03   CUDA Version: 11.4     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla V100-SXM2...  On   | 00000000:00:09.0 Off |                    0 | S
+| N/A   38C    P0    61W / 300W |    569MiB /  4309MiB |      2%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+ E
+|   1  Tesla V100-SXM2...  On   | 00000000:00:0A.0 Off |                    0 | S
+| N/A   36C    P0    61W / 300W |    381MiB /  4309MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+ E
+```

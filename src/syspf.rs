@@ -24,8 +24,8 @@ pub struct GpuEntry {
     // pub sppci_model: String,
     #[serde(default)]
     pub sppci_bus: String,
-    #[serde(default)]
-    pub sppci_cores: String,
+    // #[serde(default)]
+    // pub sppci_cores: String,
     #[serde(default)]
     pub spdisplays_mtlgpufamilysupport: String,
 }

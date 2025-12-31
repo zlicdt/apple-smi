@@ -31,15 +31,7 @@ pub fn render() -> Result<()> {
     ui::print_title();
     ui::print_div_str(2);
     for (i, g) in root.gpus.iter().enumerate() {
-        let name: &str = g.name.as_str();
-        let cores: &str = g.sppci_cores.as_str();
-        let bus: &str = g.bus_label();
-        let metal: &str = g.metal_lable();
-
-        // TODO: apple-smi format
-        println!(
-            "GPU {i}: name={name}, cores={cores}, bus={bus}, metal={metal}"
-        );
+        ui::print_card(i, g);
     }
 
     Ok(())
