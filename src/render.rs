@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 /*
  * apple-smi: Apple Silicon System Management Interface
- * Copyright (C) 2025 zlicdt@ReSpringClipsNeko
+ * Copyright (C) 2026 zlicdt@ReSpringClipsNeko
  * render.rs
  * Render the output.
 */
