@@ -143,7 +143,7 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics) {
         line.clear();
         line.push('|');
     }
-    print_div_str(0);
+    print_div_str(1);
 }
 
 pub fn print_empty_line() {
