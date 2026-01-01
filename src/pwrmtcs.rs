@@ -7,7 +7,7 @@
 */
 
 use std::process::Command;
-use anyhow::{anyhow, Result};
+use anyhow::Result;
 #[derive(Debug, Clone)]
 pub struct GpuMetrics {
     /// MHz

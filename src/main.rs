@@ -10,8 +10,8 @@ mod render;
 mod syspf;
 mod utils;
 mod pwrmtcs;
+mod mtlapi;
 
 fn main() -> Result<()> {
-    // TODO: Check root permissions, that we can get powermetrics data
     render::render()
 }

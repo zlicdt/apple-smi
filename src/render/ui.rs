@@ -8,6 +8,7 @@
 use crate::utils;
 use crate::syspf;
 use crate::pwrmtcs;
+use crate::mtlapi;
 
 fn pad(s: &str, width: usize) -> String {
     if s.len() >= width {
@@ -107,10 +108,9 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics) {
         Some(v) => format!("{:>4}", v), // right-align to 4 chars, fill leading spaces as needed
         None => String::from(" N/A"),
     };
-    let status = match p.gpu_hw_freq {
-        Some(v) if v > 0 => "On",
-        Some(_) => "Off",
-        None => "N/A",
+    let status = match mtlapi::gpu_initialized_probe() {
+        true => "On",
+        false => "Off",
     };
     let disp_a = format!("{:>3}", status);
     let pwr = match p.gpu_pwr {
