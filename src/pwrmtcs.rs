@@ -7,17 +7,17 @@
 */
 
 use std::process::Command;
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 #[derive(Debug, Clone)]
 pub struct GpuMetrics {
     /// MHz
-    pub gpu_hw_freq: u32,
+    pub gpu_hw_freq: Option<u32>,
     /// percentage points (e.g. 4.63 means 4.63%)
-    pub gpu_hw_residency: f64,
+    pub gpu_hw_residency: Option<f64>,
     /// SW_Pn residency, index 0 unused; SW_P1 at [1]
-    pub gpu_sw_state: Vec<f64>,
+    pub gpu_sw_state: Option<Vec<f64>>,
     /// mW
-    pub gpu_pwr: u32,
+    pub gpu_pwr: Option<u32>,
 }
 
 pub fn run_pwrmtcs() -> Result<GpuMetrics> {
@@ -25,19 +25,19 @@ pub fn run_pwrmtcs() -> Result<GpuMetrics> {
     let output = Command::new("sh").args(["-c", cmd]).output()?;
     let stdout = String::from_utf8_lossy(&output.stdout);
 
-    let mut gpu_hw_freq: u32 = 0;
-    let mut gpu_hw_residency: f64 = 0.0;
+    let mut gpu_hw_freq: Option<u32> = None;
+    let mut gpu_hw_residency: Option<f64> = None;
     let mut gpu_sw_state: Vec<f64> = vec![0.0; 16]; // index 0 unused; SW_P1..SW_P15 at 1..15
-    let mut gpu_pwr: u32 = 0;
+    let mut gpu_pwr: Option<u32> = None;
 
     for line in stdout.lines() {
         if let Some(rest) = line.strip_prefix("GPU HW active frequency:") {
             if let Some(freq_str) = rest.trim().split_whitespace().next() {
-                gpu_hw_freq = freq_str.parse()?;
+                gpu_hw_freq = Some(freq_str.parse()?);
             }
         } else if let Some(rest) = line.strip_prefix("GPU HW active residency:") {
             let percent_str = rest.split('%').next().unwrap_or("").trim();
-            gpu_hw_residency = percent_str.parse()?;
+            gpu_hw_residency = Some(percent_str.parse()?);
         } else if let Some(rest) = line.strip_prefix("GPU SW state:") {
             let mut parts = rest.split_whitespace();
             while let Some(token) = parts.next() {
@@ -56,7 +56,7 @@ pub fn run_pwrmtcs() -> Result<GpuMetrics> {
             }
         } else if let Some(rest) = line.strip_prefix("GPU Power:") {
             if let Some(pwr_str) = rest.trim().split_whitespace().next() {
-                gpu_pwr = pwr_str.parse()?;
+                gpu_pwr = Some(pwr_str.parse()?);
             }
         }
     }
@@ -64,7 +64,7 @@ pub fn run_pwrmtcs() -> Result<GpuMetrics> {
     Ok(GpuMetrics {
         gpu_hw_freq,
         gpu_hw_residency,
-        gpu_sw_state,
+        gpu_sw_state: Some(gpu_sw_state),
         gpu_pwr,
     })
 }

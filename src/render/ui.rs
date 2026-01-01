@@ -103,10 +103,20 @@ pub fn print_title() {
 pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics) {
     let name: &str = g.name.as_str();
     let bus: &str = g.bus_label();
-    let freq = format!("{:>4}", p.gpu_hw_freq); // right-align to 4 chars, fill leading spaces as needed
-    let stats = if p.gpu_hw_freq == 0 { "Off" } else { "On" };
-    let disp_a = format!("{:>3}", stats);
-    let pwr = format!("{}", p.gpu_pwr);
+    let freq = match p.gpu_hw_freq {
+        Some(v) => format!("{:>4}", v), // right-align to 4 chars, fill leading spaces as needed
+        None => String::from(" N/A"),
+    };
+    let status = match p.gpu_hw_freq {
+        Some(v) if v > 0 => "On",
+        Some(_) => "Off",
+        None => "N/A",
+    };
+    let disp_a = format!("{:>3}", status);
+    let pwr = match p.gpu_pwr {
+        Some(v) => format!("{}", v),
+        None => String::from("N/A"),
+    };
     const SEGMENTS: [[usize; 3]; 3] = [[32, 30, 27], [41, 25, 23], [41, 25, 23]];
     let container: [[String; 3]; 3] = [
         [

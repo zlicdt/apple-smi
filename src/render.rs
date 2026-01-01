@@ -7,6 +7,7 @@
 */
 use crate::syspf;
 use crate::pwrmtcs;
+use crate::utils;
 mod ui;
 use anyhow::Result;
 
@@ -14,7 +15,16 @@ pub fn render() -> Result<()> {
     let (gpu_json, os_json) = syspf::run_syspf()?;
     let root: syspf::Root = serde_json::from_str(&gpu_json)?;
     let os_ver: syspf::SysProf = serde_json::from_str(&os_json)?;
-    let pwrmtcs_outs: pwrmtcs::GpuMetrics = pwrmtcs::run_pwrmtcs()?;
+    let pwrmtcs_outs: pwrmtcs::GpuMetrics = if utils::is_root() {
+        pwrmtcs::run_pwrmtcs()?
+    } else {
+        pwrmtcs::GpuMetrics {
+            gpu_hw_freq: None,
+            gpu_hw_residency: None,
+            gpu_sw_state: None,
+            gpu_pwr: None,
+        }
+    };
     let os_label = os_ver
         .system
         .get(0)
