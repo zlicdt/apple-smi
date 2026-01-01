@@ -117,6 +117,10 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics) {
         Some(v) => format!("{:>5}", v),
         None => format!("{:>5}", "N/A"),
     };
+    let gpu_sw_state = match p.gpu_sw_state {
+        Some(idx) => format!("P{}", idx),
+        None => String::from("N/A"),
+    };
     const SEGMENTS: [[usize; 3]; 3] = [[32, 30, 27], [32, 34, 23], [41, 25, 23]];
     let container: [[String; 3]; 3] = [
         [
@@ -126,7 +130,7 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics) {
         ],
         // TODO: Fill real data by powermetrics
         [
-            format!(" N/A  Temp"),
+            format!(" N/A  Temp  {}", gpu_sw_state), // Fan speed and Temp not available
             format!("{} mW |           Memory-Usage", pwr),
             format!("| GPU-Util     Default"),
         ],

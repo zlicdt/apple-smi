@@ -10,13 +10,17 @@ use std::process::Command;
 use anyhow::Result;
 #[derive(Debug, Clone)]
 pub struct GpuMetrics {
-    /// MHz
+    // MHz
     pub gpu_hw_freq: Option<u32>,
-    /// percentage points (e.g. 4.63 means 4.63%)
+    // percentage points (e.g. 4.63 means 4.63%)
     pub gpu_hw_residency: Option<f64>,
-    /// SW_Pn residency, index 0 unused; SW_P1 at [1]
-    pub gpu_sw_state: Option<Vec<f64>>,
-    /// mW
+    /* 
+     * SW_Pn residency winner (e.g. 3 means SW_P3)
+     * It is like a list, so I have no idea to choose who as the gpu_sw_state
+     * Use maximum value like codes below
+     */
+    pub gpu_sw_state: Option<usize>,
+    // mW
     pub gpu_pwr: Option<u32>,
 }
 
@@ -27,7 +31,7 @@ pub fn run_pwrmtcs() -> Result<GpuMetrics> {
 
     let mut gpu_hw_freq: Option<u32> = None;
     let mut gpu_hw_residency: Option<f64> = None;
-    let mut gpu_sw_state: Vec<f64> = vec![0.0; 16]; // index 0 unused; SW_P1..SW_P15 at 1..15
+    let mut max_sw_state: Option<(usize, f64)> = None; // track (idx, value)
     let mut gpu_pwr: Option<u32> = None;
 
     for line in stdout.lines() {
@@ -47,10 +51,10 @@ pub fn run_pwrmtcs() -> Result<GpuMetrics> {
                     if let Some(val_token) = parts.next() {
                         let val_clean = val_token.trim_end_matches(|c| c == '%' || c == ')');
                         let idx: usize = idx_str.parse()?;
-                        if idx >= gpu_sw_state.len() {
-                            gpu_sw_state.resize(idx + 1, 0.0);
+                        let val: f64 = val_clean.parse()?;
+                        if max_sw_state.map(|(_, prev)| val > prev).unwrap_or(true) {
+                            max_sw_state = Some((idx, val));
                         }
-                        gpu_sw_state[idx] = val_clean.parse()?;
                     }
                 }
             }
@@ -64,7 +68,7 @@ pub fn run_pwrmtcs() -> Result<GpuMetrics> {
     Ok(GpuMetrics {
         gpu_hw_freq,
         gpu_hw_residency,
-        gpu_sw_state: Some(gpu_sw_state),
+        gpu_sw_state: max_sw_state.map(|(idx, _)| idx),
         gpu_pwr,
     })
 }
