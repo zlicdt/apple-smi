@@ -11,6 +11,7 @@ mod syspf;
 mod utils;
 mod pwrmtcs;
 mod mtlapi;
+mod ioreg;
 
 fn main() -> Result<()> {
     render::render()
