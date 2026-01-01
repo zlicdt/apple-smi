@@ -114,10 +114,10 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics) {
     };
     let disp_a = format!("{:>3}", status);
     let pwr = match p.gpu_pwr {
-        Some(v) => format!("{}", v),
-        None => String::from("N/A"),
+        Some(v) => format!("{:>5}", v),
+        None => format!("{:>5}", "N/A"),
     };
-    const SEGMENTS: [[usize; 3]; 3] = [[32, 30, 27], [41, 25, 23], [41, 25, 23]];
+    const SEGMENTS: [[usize; 3]; 3] = [[32, 30, 27], [32, 34, 23], [41, 25, 23]];
     let container: [[String; 3]; 3] = [
         [
             format!("   {}  {}", i, name), // leading space per requirement
@@ -126,8 +126,8 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics) {
         ],
         // TODO: Fill real data by powermetrics
         [
-            format!(" N/A  Temp                     {} mW", pwr),
-            format!("|           Memory-Usage"),
+            format!(" N/A  Temp"),
+            format!("{} mW |           Memory-Usage", pwr),
             format!("| GPU-Util     Default"),
         ],
         [String::from(""), String::from("|"), String::from("|")],
