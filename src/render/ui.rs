@@ -6,6 +6,8 @@
  * Construct output text.
 */
 use crate::utils;
+use crate::syspf;
+use crate::pwrmtcs;
 
 fn pad(s: &str, width: usize) -> String {
     if s.len() >= width {
@@ -98,21 +100,25 @@ pub fn print_title() {
     }
 }
 
-pub fn print_card(i: usize, g: &crate::syspf::GpuEntry) {
+pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics) {
     let name: &str = g.name.as_str();
     let bus: &str = g.bus_label();
-    const SEGMENTS: [[usize; 3]; 3] = [[41, 25, 23], [41, 25, 23], [41, 25, 23]];
+    let freq = format!("{:>4}", p.gpu_hw_freq); // right-align to 4 chars, fill leading spaces as needed
+    let stats = if p.gpu_hw_freq == 0 { "Off" } else { "On" };
+    let disp_a = format!("{:>3}", stats);
+    let pwr = format!("{}", p.gpu_pwr);
+    const SEGMENTS: [[usize; 3]; 3] = [[32, 30, 27], [41, 25, 23], [41, 25, 23]];
     let container: [[String; 3]; 3] = [
         [
             format!("   {}  {}", i, name), // leading space per requirement
-            format!("|   {}          {}", bus, "On"), // TODO: display status from syspf display list
-            String::from("|"),
+            format!("{} MHz |   {}", freq, bus), // TODO: display status from syspf display list
+            format!("{} |", disp_a),
         ],
         // TODO: Fill real data by powermetrics
         [
-            String::from(" Fan  Temp                     Pwr:Usage"),
-            String::from("|           Memory-Usage"),
-            String::from("| GPU-Util  Compute M."),
+            format!(" N/A  Temp                     {} mW", pwr),
+            format!("|           Memory-Usage"),
+            format!("| GPU-Util     Default"),
         ],
         [String::from(""), String::from("|"), String::from("|")],
     ];

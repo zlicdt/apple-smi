@@ -6,6 +6,7 @@
  * Render the output.
 */
 use crate::syspf;
+use crate::pwrmtcs;
 mod ui;
 use anyhow::Result;
 
@@ -13,7 +14,7 @@ pub fn render() -> Result<()> {
     let (gpu_json, os_json) = syspf::run_syspf()?;
     let root: syspf::Root = serde_json::from_str(&gpu_json)?;
     let os_ver: syspf::SysProf = serde_json::from_str(&os_json)?;
-
+    let pwrmtcs_outs: pwrmtcs::GpuMetrics = pwrmtcs::run_pwrmtcs()?;
     let os_label = os_ver
         .system
         .get(0)
@@ -27,7 +28,7 @@ pub fn render() -> Result<()> {
     ui::print_title();
     ui::print_div_str(2);
     for (i, g) in root.gpus.iter().enumerate() {
-        ui::print_card(i, g);
+        ui::print_card(i, g, &pwrmtcs_outs);
     }
     ui::print_empty_line();
     ui::print_tprocess_header();
