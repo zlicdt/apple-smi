@@ -1,9 +1,9 @@
 # Apple SMI
 [![Build](https://github.com/zlicdt/apple-smi/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/zlicdt/apple-smi/actions/workflows/build.yml)
-[![Release](https://img.shields.io/github/v/release/zlicdt/apple-smi?style=flat-square)](https://github.com/zlicdt/apple-smi/releases)
-[![Downloads](https://img.shields.io/github/downloads/zlicdt/apple-smi/total?style=flat-square)](https://github.com/zlicdt/apple-smi/releases)
-[![License](https://img.shields.io/github/license/zlicdt/apple-smi?style=flat-square)](https://github.com/zlicdt/apple-smi/blob/main/LICENSE)
-[![Stars](https://img.shields.io/github/stars/zlicdt/apple-smi?style=flat-square)](https://github.com/zlicdt/apple-smi/stargazers)
+[![Release](https://img.shields.io/github/v/release/zlicdt/apple-smi?style=flat)](https://github.com/zlicdt/apple-smi/releases)
+[![Downloads](https://img.shields.io/github/downloads/zlicdt/apple-smi/total?style=flat)](https://github.com/zlicdt/apple-smi/releases)
+[![License](https://img.shields.io/github/license/zlicdt/apple-smi?style=flat)](https://github.com/zlicdt/apple-smi/blob/main/LICENSE)
+[![Stars](https://img.shields.io/github/stars/zlicdt/apple-smi?style=flat)](https://github.com/zlicdt/apple-smi/stargazers)
 
 **Apple Silicon System Management Interface**
 
