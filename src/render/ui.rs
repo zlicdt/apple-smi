@@ -9,6 +9,7 @@ use crate::utils;
 use crate::syspf;
 use crate::pwrmtcs;
 use crate::mtlapi;
+use crate::ioreg;
 
 fn pad(s: &str, width: usize) -> String {
     if s.len() >= width {
@@ -101,7 +102,7 @@ pub fn print_title() {
     }
 }
 
-pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics) {
+pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics, v: &ioreg::VramInfo) {
     let name: &str = g.name.as_str();
     let bus: &str = g.bus_label();
     let freq = match p.gpu_hw_freq {
@@ -114,14 +115,18 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics) {
     };
     let disp_a = format!("{:>3}", status);
     let pwr = match p.gpu_pwr {
-        Some(v) => format!("{:>5}", v),
-        None => format!("{:>5}", "N/A"),
+        Some(v) => format!("{:>6}", v),
+        None => format!("{:>6}", "N/A"),
     };
     let gpu_sw_state = match p.gpu_sw_state {
         Some(idx) => format!("P{}", idx),
         None => String::from("N/A"),
     };
-    const SEGMENTS: [[usize; 3]; 3] = [[32, 30, 27], [32, 34, 23], [41, 25, 23]];
+    let vram_status = match (v.inuse_vram, v.alloc_vram) {
+        (Some(inuse), Some(alloc)) => format!("{:>22}", format!("{}MiB / {}MiB", inuse, alloc)),
+        _ => String::from("N/A"),
+    };
+    const SEGMENTS: [[usize; 3]; 3] = [[32, 30, 27], [31, 12, 46], [41, 25, 23]];
     let container: [[String; 3]; 3] = [
         [
             format!("   {}  {}", i, name), // leading space per requirement
@@ -131,9 +136,10 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics) {
         // TODO: Fill real data by powermetrics
         [
             format!(" N/A  Temp  {}", gpu_sw_state), // Fan speed and Temp not available
-            format!("{} mW |           Memory-Usage", pwr),
-            format!("| GPU-Util     Default"),
+            format!("{} mW |", pwr),
+            format!("{} | GPU-Util     Default", vram_status),
         ],
+        // Line 3! empty line
         [String::from(""), String::from("|"), String::from("|")],
     ];
 
