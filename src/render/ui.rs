@@ -179,11 +179,9 @@ pub fn print_tprocess_header() {
     let container: [String; 3] = [
         String::from(" Processes:"),
         String::from(
-            "   GPU   GI   CI              PID   Type   Process name                       GPU Memory",
+            "   GPU     ID     Process name                                                  GPU Util",
         ),
-        String::from(
-            "        ID   ID                                                               Usage",
-        ),
+        String::from(""),
     ];
     let mut line = String::from("|");
     for row in 0..3 {
