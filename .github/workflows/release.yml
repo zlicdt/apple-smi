@@ -1,0 +1,45 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin
+
+      - name: Cache cargo (optional)
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build (arm64)
+        run: cargo build --release --target aarch64-apple-darwin
+
+      - name: Prepare asset (single binary)
+        shell: bash
+        run: |
+          set -euxo pipefail
+          BIN="apple-smi"
+          mkdir -p dist
+
+          cp "target/aarch64-apple-darwin/release/${BIN}" "dist/${BIN}"
+          chmod +x "dist/${BIN}"
+
+      - name: Create GitHub Release and upload binary
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            dist/apple-smi
