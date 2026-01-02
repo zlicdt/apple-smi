@@ -2,14 +2,19 @@
 
 **Apple Silicon System Management Interface**
 
-Lightweight macOS GPU inspector inspired by `nvidia-smi`. It shells out to `system_profiler` and `powermetrics`, normalizes vendor/bus/Metal labels, and prints a concise per-GPU line.
+## Overview
+
+Lightweight macOS GPU inspector inspired by `nvidia-smi`. It shells out to `system_profiler` `powermetrics` `ioreg`, and get information from `SMC`.
+
+<img width="1000" alt="image" src="https://github.com/user-attachments/assets/0623fe79-334f-4a3e-945e-5bf49af07fb7" />
+
 
 ## Requirements
 - macOS
-- Rust toolchain (stable) and Cargo
+- Rust toolchain and Cargo
 
 ## Tips
-- `powermetrics` requires root permissions.
+- Using of `powermetrics` means requires root permissions.
 - Developing materials and documents placed in `docs` folder.
 
 ## Test Run
