@@ -1,5 +1,10 @@
-// Cargo.toml: libc = "0.2"
-
+// SPDX-License-Identifier: MIT
+/*
+ * apple-smi: Apple Silicon System Management Interface
+ * Copyright (C) 2026 zlicdt@ReSpringClipsNeko
+ * smc.rs
+ * Read SMC data via IOKit FFI.
+*/
 use libc::{c_char, c_void};
 use std::collections::{HashMap, BTreeMap};
 use std::ffi::{CStr, CString};
