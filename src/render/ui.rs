@@ -133,8 +133,8 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics, v: &io
         None => format!("{:>7}", "N/A"),
     };
     let fan_speed = match s.fans.iter().map(|f| f.rpm).reduce(|a, b| a + b) {
-        Some(v) => format!("{:>3.0}", v),
-        None => format!("{:>3}", "N/A"),
+        Some(v) => format!("{:>4.0}", v),
+        None => String::from("N/A "),
     };
     let gpu_temp = match s.gpu_temp_avg {
         Some(t) => format!("{:>3}C", format!("{:.0}", t)),
@@ -149,7 +149,7 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics, v: &io
         ],
         // TODO: Fill real data by powermetrics
         [
-            format!(" {}  {}  {}", fan_speed, gpu_temp, gpu_sw_state), // Fan speed and Temp not available
+            format!(" {} {}    {}", fan_speed, gpu_temp, gpu_sw_state), // Fan speed and Temp not available
             format!("{} mW |", pwr),
             format!("{} | {}     Default", vram_status, gpu_residency),
         ],
