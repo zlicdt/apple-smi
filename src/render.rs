@@ -1,4 +1,3 @@
-use crate::ioreg;
 // SPDX-License-Identifier: MIT
 /*
  * apple-smi: Apple Silicon System Management Interface
@@ -9,6 +8,8 @@ use crate::ioreg;
 use crate::syspf;
 use crate::pwrmtcs;
 use crate::utils;
+use crate::ioreg;
+use crate::smc;
 mod ui;
 use anyhow::Result;
 
@@ -27,6 +28,7 @@ pub fn render() -> Result<()> {
         }
     };
     let ioreg_outs = ioreg::run_ioreg()?;
+    let smc_outs = smc::read_smc_snapshot()?;
     let os_label = os_ver
         .system
         .get(0)
@@ -40,7 +42,7 @@ pub fn render() -> Result<()> {
     ui::print_title();
     ui::print_div_str(2);
     for (i, g) in root.gpus.iter().enumerate() {
-        ui::print_card(i, g, &pwrmtcs_outs, &ioreg_outs);
+        ui::print_card(i, g, &pwrmtcs_outs, &ioreg_outs, &smc_outs);
     }
     ui::print_empty_line();
     ui::print_tprocess_header();

@@ -10,6 +10,7 @@ use crate::syspf;
 use crate::pwrmtcs;
 use crate::mtlapi;
 use crate::ioreg;
+use crate::smc;
 
 fn pad(s: &str, width: usize) -> String {
     if s.len() >= width {
@@ -84,7 +85,7 @@ pub fn print_title() {
             String::from("|"),
         ],
         [
-            String::from(" Fan  Temp  Perf               Pwr:Usage"),
+            String::from(" Fan  Temp   Perf              Pwr:Usage"),
             String::from("|           Memory-Usage"),
             String::from("| GPU-Util  Compute M."),
         ],
@@ -103,7 +104,7 @@ pub fn print_title() {
     }
 }
 
-pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics, v: &ioreg::VramInfo) {
+pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics, v: &ioreg::VramInfo, s: &smc::SmcSnapshot) {
     let name: &str = g.name.as_str();
     let bus: &str = g.bus_label();
     let freq = match p.gpu_hw_freq {
@@ -131,6 +132,14 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics, v: &io
         Some(v) => format!("{:>7}", format!("{:.0}%", v.trunc())),
         None => format!("{:>7}", "N/A"),
     };
+    let fan_speed = match s.fans.iter().map(|f| f.rpm).reduce(|a, b| a + b) {
+        Some(v) => format!("{:>3}", v),
+        None => format!("{:>3}", "N/A"),
+    };
+    let gpu_temp = match s.gpu_temp_avg {
+        Some(t) => format!("{:>3}C", format!("{:.0}", t)),
+        None => String::from("N/A"),
+    };
     const SEGMENTS: [[usize; 3]; 3] = [[32, 30, 27], [31, 12, 46], [41, 25, 23]];
     let container: [[String; 3]; 3] = [
         [
@@ -140,7 +149,7 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics, v: &io
         ],
         // TODO: Fill real data by powermetrics
         [
-            format!(" N/A  Temp  {}", gpu_sw_state), // Fan speed and Temp not available
+            format!(" {}  {}  {}", fan_speed, gpu_temp, gpu_sw_state), // Fan speed and Temp not available
             format!("{} mW |", pwr),
             format!("{} | {}     Default", vram_status, gpu_residency),
         ],

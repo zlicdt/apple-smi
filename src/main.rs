@@ -13,6 +13,7 @@ mod utils;
 mod pwrmtcs;
 mod mtlapi;
 mod ioreg;
+mod smc;
 
 fn main() -> Result<()> {
     // Local time
