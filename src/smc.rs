@@ -326,14 +326,12 @@ pub fn read_smc_snapshot() -> Result<SmcSnapshot> {
         if let Some(idx) = fan_index_from_key(&k) {
             if let Ok(v) = smc.read_val(&k) {
                 if let Some(rpm) = decode_numeric(&v) {
-                    if rpm > 0.0 {
-                        fans_map.insert(idx, FanReading {
-                            index: idx,
-                            rpm,
-                            key: k.clone(),
-                            encoding: v.unit.clone(),
-                        });
-                    }
+                    fans_map.insert(idx, FanReading {
+                        index: idx,
+                        rpm,
+                        key: k.clone(),
+                        encoding: v.unit.clone(),
+                    });
                 }
             }
             continue;

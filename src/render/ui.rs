@@ -133,7 +133,7 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics, v: &io
         None => format!("{:>7}", "N/A"),
     };
     let fan_speed = match s.fans.iter().map(|f| f.rpm).reduce(|a, b| a + b) {
-        Some(v) => format!("{:>3}", v),
+        Some(v) => format!("{:>3.0}", v),
         None => format!("{:>3}", "N/A"),
     };
     let gpu_temp = match s.gpu_temp_avg {
