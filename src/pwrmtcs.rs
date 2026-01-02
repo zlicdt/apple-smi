@@ -24,6 +24,13 @@ pub struct GpuMetrics {
     pub gpu_pwr: Option<u32>,
 }
 
+#[derive(Debug, Clone)]
+pub struct ProcGpu {
+    pub name: String,
+    pub pid: u32,
+    pub gpu_ms_per_s: f64,
+}
+
 pub fn run_pwrmtcs() -> Result<GpuMetrics> {
     let cmd = "powermetrics -s gpu_power -i 200 -n 1 | grep -E '^GPU (HW active frequency|HW active residency|SW state|Power):'";
     let output = Command::new("sh").args(["-c", cmd]).output()?;
@@ -71,4 +78,38 @@ pub fn run_pwrmtcs() -> Result<GpuMetrics> {
         gpu_sw_state: max_sw_state.map(|(idx, _)| idx),
         gpu_pwr,
     })
+}
+
+pub fn run_pwrmtcs_procs() -> Result<Vec<ProcGpu>> {
+    let cmd = "powermetrics --samplers tasks --show-process-gpu -n 1 -i 200";
+    let output = Command::new("sh").args(["-c", cmd]).output()?;
+    let stdout = String::from_utf8_lossy(&output.stdout);
+
+    let mut procs = Vec::new();
+
+    const NUMERIC_COLS: usize = 8; // ID, CPU ms/s, User%, deadline1, deadline2, wakeup1, wakeup2, GPU ms/s
+
+    for line in stdout.lines() {
+        let tokens: Vec<&str> = line.split_whitespace().collect();
+        // Expect: name (one or more tokens) + 8 numeric columns.
+        if tokens.len() < NUMERIC_COLS + 1 {
+            continue;
+        }
+        let name_tokens = tokens.len() - NUMERIC_COLS;
+        let name = tokens[0..name_tokens].join(" ");
+        let pid_token = tokens[name_tokens];
+        let gpu_token = tokens.last().copied().unwrap_or("0");
+        let pid: u32 = match pid_token.parse() {
+            Ok(v) => v,
+            Err(_) => continue,
+        };
+        let gpu_ms_per_s: f64 = match gpu_token.parse() {
+            Ok(v) => v,
+            Err(_) => continue,
+        };
+
+        procs.push(ProcGpu { name, pid, gpu_ms_per_s });
+    }
+
+    Ok(procs)
 }

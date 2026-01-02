@@ -193,3 +193,26 @@ pub fn print_tprocess_header() {
     }
     print_div_str(3);
 }
+
+pub fn print_processes() {
+    let procs = match pwrmtcs::run_pwrmtcs_procs() {
+        Ok(p) => p,
+        Err(_) => {
+            // Pad 89s
+            println!("|{}|", pad(" N/A", 89));
+            print_div_str(3);
+            return;
+        }
+    };
+
+    for proc in procs {
+        // Since powermetrics output does not provide GPU index, no idea to know which GPU :(
+        let gpu_col = String::from("0");
+        let pid_col = format!("{}", proc.pid);
+        let name_col = pad(&proc.name, 54);
+        let util_col = format!("{:.2}", proc.gpu_ms_per_s);
+        let line = format!("| {:>5} {:>7}    {} {:>15} |", gpu_col, pid_col, name_col, util_col);
+        println!("{}", line);
+    }
+    print_div_str(0);
+}

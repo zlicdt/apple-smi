@@ -46,6 +46,6 @@ pub fn render() -> Result<()> {
     }
     ui::print_empty_line();
     ui::print_tprocess_header();
-
+    ui::print_processes();
     Ok(())
 }
