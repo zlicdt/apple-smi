@@ -127,6 +127,10 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics, v: &io
         (Some(inuse), Some(alloc)) => format!("{:>22}", format!("{}MiB / {}MiB", inuse, alloc)),
         _ => String::from("N/A"),
     };
+    let gpu_residency = match p.gpu_hw_residency {
+        Some(v) => format!("{:>7}", format!("{:.0}%", v.trunc())),
+        None => format!("{:>7}", "N/A"),
+    };
     const SEGMENTS: [[usize; 3]; 3] = [[32, 30, 27], [31, 12, 46], [41, 25, 23]];
     let container: [[String; 3]; 3] = [
         [
@@ -138,7 +142,7 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics, v: &io
         [
             format!(" N/A  Temp  {}", gpu_sw_state), // Fan speed and Temp not available
             format!("{} mW |", pwr),
-            format!("{} | GPU-Util     Default", vram_status),
+            format!("{} | {}     Default", vram_status, gpu_residency),
         ],
         // Line 3! empty line
         [String::from(""), String::from("|"), String::from("|")],
