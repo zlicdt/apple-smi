@@ -1,17 +1,40 @@
 # Apple SMI
+[![Build](https://github.com/zlicdt/apple-smi/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/zlicdt/apple-smi/actions/workflows/build.yml)
+[![Release](https://img.shields.io/github/v/release/zlicdt/apple-smi?style=flat-square)](https://github.com/zlicdt/apple-smi/releases)
+[![Downloads](https://img.shields.io/github/downloads/zlicdt/apple-smi/total?style=flat-square)](https://github.com/zlicdt/apple-smi/releases)
+[![License](https://img.shields.io/github/license/zlicdt/apple-smi?style=flat-square)](https://github.com/zlicdt/apple-smi/blob/main/LICENSE)
+[![Stars](https://img.shields.io/github/stars/zlicdt/apple-smi?style=flat-square)](https://github.com/zlicdt/apple-smi/stargazers)
 
 **Apple Silicon System Management Interface**
 
 ## Overview
 
-Lightweight macOS GPU inspector inspired by `nvidia-smi`. It shells out to `system_profiler` `powermetrics` `ioreg`, and get information from `SMC`.
+Lightweight macOS GPU inspector inspired by `nvidia-smi`.
+Shows GPU frequency / power / memory usage / utilization in a familiar table.
 
 <img width="1000" alt="image" src="https://github.com/user-attachments/assets/0623fe79-334f-4a3e-945e-5bf49af07fb7" />
 
+## Quick start
+### Download
+Go to **Releases** and download the prebuilt binary for your Mac. (Currently recommended)
+
+### Build from source
+To build this, ensure the system have **[Rust toolchain and Cargo](https://rust-lang.org/learn/get-started/)** first.
+```bash
+git clone --depth=1 https://github.com/zlicdt/apple-smi
+cargo build --release
+sudo ./target/release/apple-smi
+```
 
 ## Requirements
-- macOS
-- Rust toolchain and Cargo
+- Apple Silicon Macs
+- Because of use of `powermetrics`, this program needs **root** permissions to measure
+    - Performance state
+    - Frequency
+    - Power
+    - GPU utilization
+
+    **Rootless is working in progress...**
 
 ## Tips
 - Using of `powermetrics` means requires root permissions.
@@ -21,6 +44,9 @@ Lightweight macOS GPU inspector inspired by `nvidia-smi`. It shells out to `syst
 ```sh
 cargo run
 ```
+
+## How it works
+It shells out to `system_profiler` `powermetrics` `ioreg`, and get information from `SMC`.
 
 ## Contributing
 Issues and PRs welcome. Run `cargo fmt` and `cargo clippy` before sending changes.
