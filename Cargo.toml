@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 anyhow = "1.0.100"
+chrono = "0.4.42"
 libc = "0.2.178"
 objc2-metal = "0.3.2"
 serde = { version = "1.0.228", features = ["derive"] }

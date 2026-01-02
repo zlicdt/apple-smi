@@ -6,6 +6,7 @@
  * The 'entry'.
 */
 use anyhow::Result;
+use chrono::Local;
 mod render;
 mod syspf;
 mod utils;
@@ -14,5 +15,7 @@ mod mtlapi;
 mod ioreg;
 
 fn main() -> Result<()> {
+    // Local time
+    println!("{}", Local::now().format("%a %b %e %T %Y"));
     render::render()
 }
