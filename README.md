@@ -7,6 +7,8 @@
 [![License](https://img.shields.io/github/license/zlicdt/apple-smi?style=flat)](https://github.com/zlicdt/apple-smi/blob/main/LICENSE)
 [![Stars](https://img.shields.io/github/stars/zlicdt/apple-smi?style=flat)](https://github.com/zlicdt/apple-smi/stargazers)
 
+`nvidia-smi` like cli tool for Apple Silicon (macOS)
+
 ## Overview
 
 Lightweight macOS GPU inspector inspired by `nvidia-smi`.
