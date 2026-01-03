@@ -37,9 +37,13 @@ jobs:
           cp "target/aarch64-apple-darwin/release/${BIN}" "dist/${BIN}"
           chmod +x "dist/${BIN}"
 
+          SHA="$(shasum -a 256 "dist/${BIN}" | awk '{print $1}')"
+          echo "${SHA}  ${BIN}" > "dist/${BIN}.sha256"
+
       - name: Create GitHub Release and upload binary
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
           files: |
             dist/apple-smi
+            dist/apple-smi.sha256
