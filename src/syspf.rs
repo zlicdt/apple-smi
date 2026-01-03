@@ -4,7 +4,7 @@
  * Copyright (C) 2026 zlicdt@ReSpringClipsNeko
  * syspf.rs
  * Fetch data by running system_profiler output JSON and parse that.
-*/
+ */
 use anyhow::{Context, Ok, Result};
 use serde::Deserialize;
 use std::process::Command;

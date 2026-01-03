@@ -4,7 +4,7 @@
  * Copyright (C) 2026 zlicdt@ReSpringClipsNeko
  * mtlapi.rs
  * Check is the gpu initialized via Metal API.
-*/
+ */
 #[link(name = "CoreGraphics", kind = "framework")]
 unsafe extern "C" {}
 

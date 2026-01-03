@@ -4,7 +4,7 @@
  * Copyright (C) 2026 zlicdt@ReSpringClipsNeko
  * render.rs
  * Render the output.
-*/
+ */
 use crate::ioreg;
 use crate::pwrmtcs;
 use crate::smc;
@@ -24,7 +24,7 @@ pub fn render() -> Result<()> {
             gpu_hw_freq: None,
             gpu_hw_residency: None,
             gpu_sw_state: None,
-            gpu_pwr: None,
+            // gpu_pwr: None,
         }
     };
     let ioreg_outs = ioreg::run_ioreg()?;

@@ -4,7 +4,7 @@
  * Copyright (C) 2026 zlicdt@ReSpringClipsNeko
  * ioreg.rs
  * Fetch data by running ioreg output and parse that.
-*/
+ */
 use anyhow::Result;
 use std::process::Command;
 

@@ -4,14 +4,15 @@
  * Copyright (C) 2026 zlicdt@ReSpringClipsNeko
  * ui.rs
  * Construct output text.
-*/
+ */
+
 use crate::ioreg;
+use crate::ioreport;
 use crate::mtlapi;
 use crate::pwrmtcs;
 use crate::smc;
 use crate::syspf;
 use crate::utils;
-
 fn pad(s: &str, width: usize) -> String {
     if s.len() >= width {
         s[..width].to_string()
@@ -122,9 +123,9 @@ pub fn print_card(
         false => "Off",
     };
     let disp_a = format!("{:>3}", status);
-    let pwr = match p.gpu_pwr {
-        Some(v) => format!("{:>6}", v),
-        None => format!("{:>6}", "N/A"),
+    let pwr = match ioreport::sample_gpu_power_once(200) {
+        Ok(Some(w)) => format!("{:>6.0}", w * 1000.0),
+        _ => format!("{:>6}", "N/A"),
     };
     let gpu_sw_state = match p.gpu_sw_state {
         Some(idx) => format!("P{}", idx),

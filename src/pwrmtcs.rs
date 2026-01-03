@@ -4,7 +4,7 @@
  * Copyright (C) 2026 zlicdt@ReSpringClipsNeko
  * pwrmtcs.rs
  * Fetch data by running powermetrics output and parse that.
-*/
+ */
 
 use anyhow::Result;
 use std::process::Command;
@@ -21,7 +21,7 @@ pub struct GpuMetrics {
      */
     pub gpu_sw_state: Option<usize>,
     // mW
-    pub gpu_pwr: Option<u32>,
+    // pub gpu_pwr: Option<u32>,
 }
 
 #[derive(Debug, Clone)]
@@ -39,7 +39,7 @@ pub fn run_pwrmtcs() -> Result<GpuMetrics> {
     let mut gpu_hw_freq: Option<u32> = None;
     let mut gpu_hw_residency: Option<f64> = None;
     let mut max_sw_state: Option<(usize, f64)> = None; // track (idx, value)
-    let mut gpu_pwr: Option<u32> = None;
+    // let mut gpu_pwr: Option<u32> = None;
 
     for line in stdout.lines() {
         if let Some(rest) = line.strip_prefix("GPU HW active frequency:") {
@@ -65,18 +65,18 @@ pub fn run_pwrmtcs() -> Result<GpuMetrics> {
                     }
                 }
             }
-        } else if let Some(rest) = line.strip_prefix("GPU Power:") {
+        }/* else if let Some(rest) = line.strip_prefix("GPU Power:") {
             if let Some(pwr_str) = rest.trim().split_whitespace().next() {
                 gpu_pwr = Some(pwr_str.parse()?);
             }
-        }
+        } */
     }
 
     Ok(GpuMetrics {
         gpu_hw_freq,
         gpu_hw_residency,
         gpu_sw_state: max_sw_state.map(|(idx, _)| idx),
-        gpu_pwr,
+        // gpu_pwr,
     })
 }
 

@@ -4,18 +4,18 @@
  * Copyright (C) 2026 zlicdt@ReSpringClipsNeko
  * main.rs
  * The 'entry'.
-*/
+ */
 use anyhow::Result;
 use chrono::Local;
 use clap::Command;
 mod ioreg;
+mod ioreport;
 mod mtlapi;
 mod pwrmtcs;
 mod render;
 mod smc;
 mod syspf;
 mod utils;
-
 fn main() -> Result<()> {
     /*
      * For argument, display help & version
