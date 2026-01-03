@@ -198,12 +198,17 @@ pub fn print_processes() {
     let procs = match pwrmtcs::run_pwrmtcs_procs() {
         Ok(p) => p,
         Err(_) => {
-            // Pad 89s
-            println!("|{}|", pad(" N/A", 89));
+            println!("|{:^89}|", "N/A");
             print_div_str(3);
             return;
         }
     };
+
+    if procs.is_empty() {
+        println!("|{:^89}|", "N/A");
+        print_div_str(3);
+        return;
+    }
 
     for proc in procs {
         // Since powermetrics output does not provide GPU index, no idea to know which GPU :(
