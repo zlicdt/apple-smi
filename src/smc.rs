@@ -4,7 +4,7 @@
  * Copyright (C) 2026 zlicdt@ReSpringClipsNeko
  * smc.rs
  * Read SMC data via IOKit FFI.
- */
+*/
 use anyhow::{Result, anyhow};
 use libc::{c_char, c_void};
 use std::collections::{BTreeMap, HashMap};
@@ -337,8 +337,6 @@ fn fan_index_from_key(k: &str) -> Option<u8> {
     }
 }
 
-// -------------------- Public API: read temps + fans --------------------
-
 /// Read CPU/GPU temps (Tp/Te/Tg) + fan RPM (F?Ac) via SMC.
 /// This is intentionally "multi-machine" friendly: it discovers keys at runtime instead of hardcoding a model list.
 pub fn read_smc_snapshot() -> Result<SmcSnapshot> {
@@ -355,7 +353,7 @@ pub fn read_smc_snapshot() -> Result<SmcSnapshot> {
     let mut fans_map: BTreeMap<u8, FanReading> = BTreeMap::new();
 
     for k in keys {
-        // Fans: detect first (no type restriction; decode_numeric will decide)
+        // Fans: detect first
         if let Some(idx) = fan_index_from_key(&k) {
             if let Ok(v) = smc.read_val(&k) {
                 if let Some(rpm) = decode_numeric(&v) {
@@ -373,7 +371,8 @@ pub fn read_smc_snapshot() -> Result<SmcSnapshot> {
             continue;
         }
 
-        // Temps: we only care about GPU temps (keys starting with "Tg").
+        // Temps: GPU temperatures are exposed as SMC float keys ("flt ") starting with "Tg" on macOS 14+ available in SMC
+        // We use this to filter GPU temp, skip values <= 0
         if !k.starts_with("Tg") {
             continue;
         }
@@ -383,29 +382,27 @@ pub fn read_smc_snapshot() -> Result<SmcSnapshot> {
             Err(_) => continue,
         };
 
-        // Primary path: macmon's flt/4B filter
-        let val = if ki.data_size == 4 && ki.data_type == FLOAT_TYPE {
-            match smc.read_val(&k) {
-                Ok(v) => {
-                    let raw = v.data.get(0..4).and_then(|b| b.try_into().ok());
-                    raw.map(|arr| (f32::from_le_bytes(arr), v.unit))
-                }
-                Err(_) => None,
-            }
-        } else {
-            // fallback: attempt decode_numeric for other encodings (sp78, etc.)
-            match smc.read_val(&k) {
-                Ok(v) => decode_numeric(&v).map(|f| (f, v.unit)),
-                Err(_) => None,
-            }
+        // macmon-style filter: 4-byte float ("flt ") only
+        if ki.data_size != 4 || ki.data_type != FLOAT_TYPE {
+            continue;
+        }
+
+        let v = match smc.read_val(&k) {
+            Ok(v) => v,
+            Err(_) => continue,
+        };
+        let raw: [u8; 4] = match v.data.get(0..4).and_then(|b| b.try_into().ok()) {
+            Some(arr) => arr,
+            None => continue,
         };
 
-        if let Some((temp_c, _unit)) = val {
-            if temp_c == 0.0 {
-                continue;
-            }
-            gpu_temps.push(temp_c);
+        let temp_c = f32::from_le_bytes(raw);
+
+        if temp_c <= 0.0 {
+            continue;
         }
+
+        gpu_temps.push(temp_c);
     }
 
     let gpu_avg = avg(&gpu_temps);
