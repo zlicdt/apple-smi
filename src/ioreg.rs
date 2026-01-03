@@ -5,8 +5,8 @@
  * ioreg.rs
  * Fetch data by running ioreg output and parse that.
 */
-use std::process::Command;
 use anyhow::Result;
+use std::process::Command;
 
 pub struct VramInfo {
     pub alloc_vram: Option<u64>,

@@ -9,11 +9,8 @@
 unsafe extern "C" {}
 
 use objc2_metal::{
-    MTLCreateSystemDefaultDevice,
-    MTLCommandBufferStatus,
+    MTLCommandBuffer, MTLCommandBufferStatus, MTLCommandQueue, MTLCreateSystemDefaultDevice,
     MTLDevice,
-    MTLCommandQueue,
-    MTLCommandBuffer,
 };
 
 pub fn gpu_initialized_probe() -> bool {

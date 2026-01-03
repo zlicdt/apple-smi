@@ -5,18 +5,18 @@
  * smc.rs
  * Read SMC data via IOKit FFI.
 */
+use anyhow::{Result, anyhow};
 use libc::{c_char, c_void};
-use std::collections::{HashMap, BTreeMap};
+use std::collections::{BTreeMap, HashMap};
 use std::ffi::{CStr, CString};
 use std::mem::size_of;
-use anyhow::{anyhow, Result};
 
 #[derive(Debug, Clone)]
 #[allow(unused)]
 pub struct FanReading {
     pub index: u8,
     pub rpm: f32,
-    pub key: String, // e.g. "F0Ac"
+    pub key: String,      // e.g. "F0Ac"
     pub encoding: String, // e.g. "fpe2"
 }
 
@@ -80,7 +80,9 @@ impl Iterator for IOServiceIter {
         let mut buf = [0 as c_char; 128];
         let kr = unsafe { IORegistryEntryGetName(obj, buf.as_mut_ptr()) };
         let name = if kr == 0 {
-            unsafe { CStr::from_ptr(buf.as_ptr()) }.to_string_lossy().to_string()
+            unsafe { CStr::from_ptr(buf.as_ptr()) }
+                .to_string_lossy()
+                .to_string()
         } else {
             String::new()
         };
@@ -171,7 +173,10 @@ impl SMC {
             return Err(anyhow!("AppleSMCKeysEndpoint not found / open failed"));
         }
 
-        Ok(Self { conn, cache: HashMap::new() })
+        Ok(Self {
+            conn,
+            cache: HashMap::new(),
+        })
     }
 
     fn read_call(&self, input: &KeyData) -> Result<KeyData> {
@@ -203,7 +208,11 @@ impl SMC {
     }
 
     pub fn key_by_index(&self, index: u32) -> Result<String> {
-        let indata = KeyData { data8: 8, data32: index, ..Default::default() };
+        let indata = KeyData {
+            data8: 8,
+            data32: index,
+            ..Default::default()
+        };
         let out = self.read_call(&indata)?;
         Ok(std::str::from_utf8(&out.key.to_be_bytes())?.to_string())
     }
@@ -217,7 +226,11 @@ impl SMC {
             return Ok(*ki);
         }
 
-        let indata = KeyData { data8: 9, key: k, ..Default::default() };
+        let indata = KeyData {
+            data8: 9,
+            key: k,
+            ..Default::default()
+        };
         let out = self.read_call(&indata)?;
         self.cache.insert(k, out.key_info);
         Ok(out.key_info)
@@ -228,12 +241,21 @@ impl SMC {
         let key_info = self.read_key_info(key)?;
         let k = fourcc_str_to_u32(key);
 
-        let indata = KeyData { data8: 5, key: k, key_info, ..Default::default() };
+        let indata = KeyData {
+            data8: 5,
+            key: k,
+            key_info,
+            ..Default::default()
+        };
         let out = self.read_call(&indata)?;
 
         let unit = std::str::from_utf8(&key_info.data_type.to_be_bytes())?.to_string();
         let n = key_info.data_size as usize;
-        Ok(SensorVal { name, unit, data: out.bytes[0..n.min(out.bytes.len())].to_vec() })
+        Ok(SensorVal {
+            name,
+            unit,
+            data: out.bytes[0..n.min(out.bytes.len())].to_vec(),
+        })
     }
 
     pub fn read_all_keys(&mut self) -> Result<Vec<String>> {
@@ -291,15 +313,21 @@ fn decode_numeric(v: &SensorVal) -> Option<f32> {
 }
 
 fn avg(vals: &[f32]) -> Option<f32> {
-    if vals.is_empty() { return None; }
+    if vals.is_empty() {
+        return None;
+    }
     Some(vals.iter().sum::<f32>() / (vals.len() as f32))
 }
 
 // fan key pattern: "F?Ac" (Actual speed). '?' is usually 0..9 (sometimes A..F).
 fn fan_index_from_key(k: &str) -> Option<u8> {
-    if k.len() != 4 { return None; }
+    if k.len() != 4 {
+        return None;
+    }
     let b = k.as_bytes();
-    if b[0] != b'F' || b[2] != b'A' || b[3] != b'c' { return None; }
+    if b[0] != b'F' || b[2] != b'A' || b[3] != b'c' {
+        return None;
+    }
     let idx = b[1];
     match idx {
         b'0'..=b'9' => Some(idx - b'0'),
@@ -331,12 +359,15 @@ pub fn read_smc_snapshot() -> Result<SmcSnapshot> {
         if let Some(idx) = fan_index_from_key(&k) {
             if let Ok(v) = smc.read_val(&k) {
                 if let Some(rpm) = decode_numeric(&v) {
-                    fans_map.insert(idx, FanReading {
-                        index: idx,
-                        rpm,
-                        key: k.clone(),
-                        encoding: v.unit.clone(),
-                    });
+                    fans_map.insert(
+                        idx,
+                        FanReading {
+                            index: idx,
+                            rpm,
+                            key: k.clone(),
+                            encoding: v.unit.clone(),
+                        },
+                    );
                 }
             }
             continue;
@@ -370,7 +401,9 @@ pub fn read_smc_snapshot() -> Result<SmcSnapshot> {
         };
 
         if let Some((temp_c, _unit)) = val {
-            if temp_c == 0.0 { continue; }
+            if temp_c == 0.0 {
+                continue;
+            }
             gpu_temps.push(temp_c);
         }
     }

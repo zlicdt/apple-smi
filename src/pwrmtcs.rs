@@ -6,15 +6,15 @@
  * Fetch data by running powermetrics output and parse that.
 */
 
-use std::process::Command;
 use anyhow::Result;
+use std::process::Command;
 #[derive(Debug, Clone)]
 pub struct GpuMetrics {
     // MHz
     pub gpu_hw_freq: Option<u32>,
     // percentage points (e.g. 4.63 means 4.63%)
     pub gpu_hw_residency: Option<f64>,
-    /* 
+    /*
      * SW_Pn residency winner (e.g. 3 means SW_P3)
      * It is like a list, so I have no idea to choose who as the gpu_sw_state
      * Use maximum value like codes below
@@ -108,7 +108,11 @@ pub fn run_pwrmtcs_procs() -> Result<Vec<ProcGpu>> {
             Err(_) => continue,
         };
 
-        procs.push(ProcGpu { name, pid, gpu_ms_per_s });
+        procs.push(ProcGpu {
+            name,
+            pid,
+            gpu_ms_per_s,
+        });
     }
 
     Ok(procs)

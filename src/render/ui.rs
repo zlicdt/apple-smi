@@ -5,12 +5,12 @@
  * ui.rs
  * Construct output text.
 */
-use crate::utils;
-use crate::syspf;
-use crate::pwrmtcs;
-use crate::mtlapi;
 use crate::ioreg;
+use crate::mtlapi;
+use crate::pwrmtcs;
 use crate::smc;
+use crate::syspf;
+use crate::utils;
 
 fn pad(s: &str, width: usize) -> String {
     if s.len() >= width {
@@ -104,7 +104,13 @@ pub fn print_title() {
     }
 }
 
-pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics, v: &ioreg::VramInfo, s: &smc::SmcSnapshot) {
+pub fn print_card(
+    i: usize,
+    g: &syspf::GpuEntry,
+    p: &pwrmtcs::GpuMetrics,
+    v: &ioreg::VramInfo,
+    s: &smc::SmcSnapshot,
+) {
     let name: &str = g.name.as_str();
     let bus: &str = g.bus_label();
     let freq = match p.gpu_hw_freq {
@@ -143,7 +149,7 @@ pub fn print_card(i: usize, g: &syspf::GpuEntry, p: &pwrmtcs::GpuMetrics, v: &io
     const SEGMENTS: [[usize; 3]; 3] = [[32, 30, 27], [31, 12, 46], [41, 25, 23]];
     let container: [[String; 3]; 3] = [
         [
-            format!("   {}  {}", i, name), // leading space per requirement
+            format!("   {}  {}", i, name),       // leading space per requirement
             format!("{} MHz |   {}", freq, bus), // TODO: display status from syspf display list
             format!("{} |", disp_a),
         ],
@@ -216,7 +222,10 @@ pub fn print_processes() {
         let pid_col = format!("{}", proc.pid);
         let name_col = pad(&proc.name, 54);
         let util_col = format!("{:.2}", proc.gpu_ms_per_s);
-        let line = format!("| {:>5} {:>7}    {} {:>15} |", gpu_col, pid_col, name_col, util_col);
+        let line = format!(
+            "| {:>5} {:>7}    {} {:>15} |",
+            gpu_col, pid_col, name_col, util_col
+        );
         println!("{}", line);
     }
     print_div_str(0);

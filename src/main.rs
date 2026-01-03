@@ -8,13 +8,13 @@
 use anyhow::Result;
 use chrono::Local;
 use clap::Command;
+mod ioreg;
+mod mtlapi;
+mod pwrmtcs;
 mod render;
+mod smc;
 mod syspf;
 mod utils;
-mod pwrmtcs;
-mod mtlapi;
-mod ioreg;
-mod smc;
 
 fn main() -> Result<()> {
     /*

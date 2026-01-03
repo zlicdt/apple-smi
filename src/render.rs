@@ -5,11 +5,11 @@
  * render.rs
  * Render the output.
 */
-use crate::syspf;
-use crate::pwrmtcs;
-use crate::utils;
 use crate::ioreg;
+use crate::pwrmtcs;
 use crate::smc;
+use crate::syspf;
+use crate::utils;
 mod ui;
 use anyhow::Result;
 
