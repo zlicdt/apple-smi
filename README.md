@@ -17,8 +17,15 @@ Shows GPU frequency / power / memory usage / utilization in a familiar table.
 <img width="1000" alt="image" src="https://github.com/user-attachments/assets/0623fe79-334f-4a3e-945e-5bf49af07fb7" />
 
 ## Quick start
+**Project is still high-speed developing, it is NOT stable now**
+### Homebrew (Recommended)
+If you have `brew`, you can:
+```bash
+brew install zlicdt/tap/apple-smi
+```
+
 ### Download
-Go to **Releases** and download the prebuilt binary for your Mac. (Currently recommended)
+Go to **Releases** and download the prebuilt binary for your Mac.
 
 ### Build from source
 To build this, ensure the system have **[Rust toolchain and Cargo](https://rust-lang.org/learn/get-started/)** first.
