@@ -40,9 +40,9 @@ sudo ./target/release/apple-smi
 - Because of use of `powermetrics`, this program needs **root** permissions to measure
     - Performance state
     - Frequency
-    - Power
     - GPU utilization
-
+    - Processes
+    
     **Rootless is working in progress...**
 
 ## Tips
