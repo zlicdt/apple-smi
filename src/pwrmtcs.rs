@@ -28,7 +28,7 @@ pub struct GpuMetrics {
 pub struct ProcGpu {
     pub name: String,
     pub pid: u32,
-    pub gpu_ms_per_s: f64,
+    // pub gpu_ms_per_s: f64,
 }
 
 pub fn run_pwrmtcs() -> Result<GpuMetrics> {
@@ -98,20 +98,21 @@ pub fn run_pwrmtcs_procs() -> Result<Vec<ProcGpu>> {
         let name_tokens = tokens.len() - NUMERIC_COLS;
         let name = tokens[0..name_tokens].join(" ");
         let pid_token = tokens[name_tokens];
-        let gpu_token = tokens.last().copied().unwrap_or("0");
+        // let gpu_token = tokens.last().copied().unwrap_or("0");
         let pid: u32 = match pid_token.parse() {
             Ok(v) => v,
             Err(_) => continue,
         };
+        /*
         let gpu_ms_per_s: f64 = match gpu_token.parse() {
             Ok(v) => v,
             Err(_) => continue,
         };
-
+        */
         procs.push(ProcGpu {
             name,
             pid,
-            gpu_ms_per_s,
+            // gpu_ms_per_s,
         });
     }
 

@@ -186,7 +186,8 @@ pub fn print_tprocess_header() {
     let container: [String; 3] = [
         String::from(" Processes:"),
         String::from(
-            "   GPU     ID     Process name                                                  GPU Util",
+            // "   GPU     ID     Process name                                                  GPU Util",
+            "  GPU   PID    Process name",
         ),
         String::from(""),
     ];
@@ -222,10 +223,12 @@ pub fn print_processes() {
         let gpu_col = String::from("0");
         let pid_col = format!("{}", proc.pid);
         let name_col = pad(&proc.name, 54);
-        let util_col = format!("{:.2}", proc.gpu_ms_per_s);
+        // let util_col = format!("{:.2}", proc.gpu_ms_per_s);
         let line = format!(
+            // "| {:>5} {:>7}    {} {:>15} |",
+            // gpu_col, pid_col, name_col, util_col
             "| {:>5} {:>7}    {} {:>15} |",
-            gpu_col, pid_col, name_col, util_col
+            gpu_col, pid_col, name_col, ""
         );
         println!("{}", line);
     }
