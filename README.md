@@ -14,7 +14,8 @@
 Lightweight macOS GPU inspector inspired by `nvidia-smi`.
 Shows GPU frequency / power / memory usage / utilization in a familiar table.
 
-<img width="1010" alt="image" src="https://github.com/user-attachments/assets/d7b38bdb-523f-488d-9705-03ce29b63d55" />
+<img width="1009" height="576" alt="image" src="https://github.com/user-attachments/assets/560f9cd2-aa3b-4433-a54c-25ae6d46dea5" />
+
 
 ## Quick start
 **Project is still high-speed developing, it is NOT stable now**
