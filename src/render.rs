@@ -49,3 +49,20 @@ pub fn render() -> Result<()> {
     ui::print_processes();
     Ok(())
 }
+
+pub fn list_gpus() -> Result<()> {
+    let (gpu_json, _) = syspf::run_syspf()?;
+    let root: syspf::Root = serde_json::from_str(&gpu_json)?;
+    // Outs like GPU 0: Apple M4 [Built-in] (Metal 4)
+    for (idx, gpu) in root.gpus.iter().enumerate() {
+        println!(
+            "GPU {}: {} [{}] (Metal {})",
+            idx,
+            gpu.name,
+            gpu.bus_label(),
+            gpu.metal_lable()
+        );
+    }
+
+    Ok(())
+}
