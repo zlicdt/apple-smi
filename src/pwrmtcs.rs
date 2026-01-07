@@ -65,10 +65,10 @@ pub fn run_pwrmtcs() -> Result<GpuMetrics> {
                     }
                 }
             }
-        }/* else if let Some(rest) = line.strip_prefix("GPU Power:") {
-            if let Some(pwr_str) = rest.trim().split_whitespace().next() {
-                gpu_pwr = Some(pwr_str.parse()?);
-            }
+        } /* else if let Some(rest) = line.strip_prefix("GPU Power:") {
+        if let Some(pwr_str) = rest.trim().split_whitespace().next() {
+        gpu_pwr = Some(pwr_str.parse()?);
+        }
         } */
     }
 
