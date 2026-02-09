@@ -14,12 +14,13 @@ use crate::smc;
 use crate::syspf;
 use crate::utils;
 fn pad(s: &str, width: usize) -> String {
-    if s.len() >= width {
-        s[..width].to_string()
+    let char_count = s.chars().count();
+    if char_count >= width {
+        s.chars().take(width).collect()
     } else {
         let mut out = String::with_capacity(width);
         out.push_str(s);
-        out.extend(std::iter::repeat(' ').take(width - s.len()));
+        out.extend(std::iter::repeat(' ').take(width - char_count));
         out
     }
 }
