@@ -31,10 +31,10 @@ pub fn render() -> Result<()> {
     let smc_outs = smc::read_smc_snapshot()?;
     let os_label = os_ver
         .system
-        .get(0)
+        .first()
         .map(|s| s.os_version_label())
         .unwrap_or("");
-    let metal_ver = root.gpus.get(0).map(|g| g.metal_lable()).unwrap_or("");
+    let metal_ver = root.gpus.first().map(|g| g.metal_label()).unwrap_or("");
 
     ui::print_div_str(0);
     ui::print_header_line(os_label, metal_ver);
@@ -60,7 +60,7 @@ pub fn list_gpus() -> Result<()> {
             idx,
             gpu.name,
             gpu.bus_label(),
-            gpu.metal_lable()
+            gpu.metal_label()
         );
     }
 

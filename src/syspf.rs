@@ -38,7 +38,7 @@ impl GpuEntry {
         }
     }
 
-    pub fn metal_lable(&self) -> &str {
+    pub fn metal_label(&self) -> &str {
         match self
             .spdisplays_mtlgpufamilysupport
             .strip_prefix("spdisplays_metal")

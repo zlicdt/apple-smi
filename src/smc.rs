@@ -4,7 +4,7 @@
  * Copyright (C) 2026 zlicdt@ReSpringClipsNeko
  * smc.rs
  * Read SMC data via IOKit FFI.
-*/
+ */
 use anyhow::{Result, anyhow};
 use libc::{c_char, c_void};
 use std::collections::{BTreeMap, HashMap};
